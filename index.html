@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUNSET MOON - Automatización Inteligente 24/7</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #fff, #e94560);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #b8b8b8;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #e94560, #ff6b6b);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
+        }
+
+        .services {
+            padding: 60px 0;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: #e94560;
+        }
+
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #e94560;
+        }
+
+        .service-card p {
+            color: #b8b8b8;
+        }
+
+        .stats {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item h3 {
+            font-size: 48px;
+            color: #e94560;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: #b8b8b8;
+            font-size: 18px;
+        }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #b8b8b8;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+        }
+
+        .contact-info a {
+            color: #e94560;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">🌙 SUNSET MOON</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Automatización Inteligente 24/7</h1>
+            <p>Ecosistema de bots que generan productos y servicios automáticamente. Transformamos tu negocio con inteligencia artificial y automatización de última generación.</p>
+            <a href="#contacto" class="cta-button">Descubre Nuestros Servicios</a>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="container">
+            <h2>Nuestros Servicios</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🤖</div>
+                    <h3>Bots de Ventas</h3>
+                    <p>Automatiza tus ventas con bots inteligentes que trabajan 24/7, captan leads y cierran deals mientras duermes.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💬</div>
+                    <h3>Atención al Cliente</h3>
+                    <p>Bots de soporte multicanal que resuelven consultas al instante y escalan solo lo necesario a humanos.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚙️</div>
+                    <h3>Automatización de Procesos</h3>
+                    <p>Conecta tus herramientas y automatiza flujos de trabajo repetitivos para maximizar la productividad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <h2>Resultados que Hablan</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>24/7</h3>
+                    <p>Operación Continua</p>
+                </div>
+                <div class="stat-item">
+                    <h3>99.9%</h3>
+                    <p>Uptime Garantizado</p>
+                </div>
+                <div class="stat-item">
+                    <h3>+500</h3>
+                    <p>Clientes Satisfechos</p>
+                </div>
+                <div class="stat-item">
+                    <h3>3x</h3>
+                    <p>ROI Promedio</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contacto">
+        <div class="container">
+            <div class="logo">🌙 SUNSET MOON</div>
+            <div class="contact-info">
+                <p>📧 Email: contacto@sunsetmoon.es</p>
+                <p>📱 Teléfono: +34 656 92 91 34</p>
+                <p>🏢 Empresa registrada en España</p>
+            </div>
+            <p style="margin-top: 30px;">© 2026 SUNSET MOON. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
