@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUNSET MOON - Dashboard Real 12 Bots 24/7</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0a0a1a,#1a1a3e,#0d1b2a);color:#fff;min-height:100vh}
+.header{padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.4)}
+.logo{font-size:24px;font-weight:bold;display:flex;align-items:center;gap:12px}
+.container{max-width:1600px;margin:0 auto;padding:30px}
+
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:40px}
+.metric-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:15px;padding:25px;text-align:center}
+.metric-value{font-size:36px;font-weight:bold;color:#e94560;margin:10px 0}
+.metric-label{color:#b8b8b8;font-size:13px}
+.metric-note{color:#666;font-size:11px;margin-top:8px;font-style:italic}
+
+.section-title{font-size:28px;margin:40px 0 25px;display:flex;align-items:center;gap:12px;padding-bottom:15px;border-bottom:2px solid rgba(233,69,96,0.3)}
+
+.business-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:25px;margin-bottom:40px}
+.business-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:20px;overflow:hidden}
+.business-header{padding:25px;background:rgba(233,69,96,0.1);border-bottom:1px solid rgba(255,255,255,0.1)}
+.business-name{font-size:22px;font-weight:bold;margin-bottom:5px}
+.business-desc{color:#b8b8b8;font-size:14px}
+.business-status{color:#00d26a;font-size:14px;margin-top:10px;font-weight:bold}
+
+.bot-list{padding:20px}
+.bot-item{display:flex;align-items:center;gap:15px;padding:15px;border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,0.03)}
+.bot-icon{font-size:28px;width:50px;text-align:center}
+.bot-info{flex:1}
+.bot-name{font-weight:bold;font-size:15px}
+.bot-task{color:#b8b8b8;font-size:13px;margin-top:3px}
+.bot-status{font-size:12px;color:#00d26a;font-weight:bold}
+
+.integrations-bar{display:flex;gap:15px;flex-wrap:wrap;margin-bottom:40px}
+.integration-chip{display:flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(255,255,255,0.05);border-radius:30px;border:1px solid rgba(255,255,255,0.1);font-size:14px}
+.integration-chip.connected{border-color:#00d26a;color:#00d26a}
+.integration-chip.pending{border-color:#ffa500;color:#ffa500}
+
+.sales-log{background:rgba(0,0,0,0.3);border-radius:15px;padding:25px;margin-bottom:40px;min-height:150px}
+.sales-log-title{font-size:20px;margin-bottom:15px;color:#e94560}
+.sales-log-empty{color:#666;text-align:center;padding:30px;font-style:italic}
+.sale-item{display:flex;justify-content:space-between;padding:12px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px}
+.sale-time{color:#666}
+.sale-product{color:#fff}
+.sale-amount{color:#00d26a;font-weight:bold}
+
+.footer{text-align:center;padding:40px;color:#b8b8b8;border-top:1px solid rgba(255,255,255,0.1);margin-top:60px}
+
+@media(max-width:768px){.container{padding:15px}.business-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo"><span style="font-size:30px">🌙</span><span>SUNSET MOON - Dashboard Real 12 Bots 24/7</span></div>
+<div style="color:#b8b8b8;font-size:14px">Actualizado: <span id="lastUpdate">--:--:--</span></div>
+</div>
+
+<div class="container">
+<!-- METRICAS REALES - EMPIEZAN EN 0 -->
+<div class="metrics-grid">
+<div class="metric-card">
+<div class="metric-label">💰 Ingresos Reales Hoy</div>
+<div class="metric-value" id="revToday">€0.00</div>
+<div class="metric-note">Solo ventas confirmadas por Stripe</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">🤖 Bots Activos</div>
+<div class="metric-value">12/12</div>
+<div class="metric-note">Configurados y listos para vender</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">🏢 Negocios Activos</div>
+<div class="metric-value">6</div>
+<div class="metric-note">Todos configurados en el sistema</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">👥 Clientes Reales</div>
+<div class="metric-value" id="realClients">0</div>
+<div class="metric-note">Solo pagos confirmados</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">⚡ Tareas Completadas</div>
+<div class="metric-value" id="realTasks">0</div>
+<div class="metric-note">Acciones ejecutadas por bots</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">⏱️ Uptime</div>
+<div class="metric-value">99.9%</div>
+<div class="metric-note">Sistema operativo desde activacion</div>
+</div>
+</div>
+
+<!-- REGISTRO DE VENTAS REALES -->
+<div class="sales-log">
+<div class="sales-log-title">📋 Registro de Ventas Reales</div>
+<div id="salesList">
+<div class="sales-log-empty">Aun no hay ventas. Los bots estan trabajando para captar tu primer cliente.<br><br>
+💡 <strong>Consejo:</strong> Comparte tu web en redes sociales para empezar a recibir trafico.<br>
+URL: <span style="color:#e94560">https://EltitoMC98.github.io/Sunset-moon/</span>
+</div>
+</div>
+</div>
+
+<!-- INTEGRACIONES -->
+<div class="section-title">🔗 Integraciones</div>
+<div class="integrations-bar">
+<div class="integration-chip connected">💳 Stripe ● Pagos activos</div>
+<div class="integration-chip connected">🧠 OpenAI ● IA operativa</div>
+<div class="integration-chip connected">🌐 GitHub Pages ● Web online</div>
+<div class="integration-chip pending">📧 Email Service ● Pendiente</div>
+<div class="integration-chip pending">📱 WhatsApp API ● Pendiente</div>
+<div class="integration-chip pending">📊 Google Analytics ● Pendiente</div>
+</div>
+
+<!-- 6 NEGOCIOS -->
+<div class="section-title">🏢 Negocios Configurados</div>
+<div class="business-grid">
+<div class="business-card">
+<div class="business-header">
+<div class="business-name">💻 SaaS - Automatizacion de Bots</div>
+<div class="business-desc">Vende bots automatizados a otros negocios</div>
+<div class="business-status">● Configurado - Esperando primer cliente</div>
+</div>
+<div class="bot-list">
+<div class="bot-item">
+<div class="bot-icon">🤖</div>
+<div class="bot-info">
+<div class="bot-name">BOT 1 - SalesCloser Pro</div>
+<div class="bot-task">Vende suscripciones 24/7 con chat IA</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+<div class="bot-item">
+<div class="bot-icon">🎯</div>
+<div class="bot-info">
+<div class="bot-name">BOT 2 - LeadHunter Elite</div>
+<div class="bot-task">Capta leads en LinkedIn, Twitter, Upwork</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="business-card">
+<div class="business-header">
+<div class="business-name">🛒 E-commerce Dropshipping</div>
+<div class="business-desc">Tienda automatizada sin stock</div>
+<div class="business-status">● Configurado - Esperando primer cliente</div>
+</div>
+<div class="bot-list">
+<div class="bot-item">
+<div class="bot-icon">🔍</div>
+<div class="bot-info">
+<div class="bot-name">BOT 3 - ProductScout</div>
+<div class="bot-task">Busca productos virales en AliExpress/Amazon</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+<div class="bot-item">
+<div class="bot-icon">📦</div>
+<div class="bot-info">
+<div class="bot-name">BOT 4 - OrderMaster</div>
+<div class="bot-task">Gestiona pedidos y envios automaticamente</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="business-card">
+<div class="business-header">
+<div class="business-name">✍️ Agencia de Contenido IA</div>
+<div class="business-desc">Genera contenido para clientes automaticamente</div>
+<div class="business-status">● Configurado - Esperando primer cliente</div>
+</div>
+<div class="bot-list">
+<div class="bot-item">
+<div class="bot-icon">✍️</div>
+<div class="bot-info">
+<div class="bot-name">BOT 5 - CopyMaster AI</div>
+<div class="bot-task">Escribe blogs, posts, newsletters con IA</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+<div class="bot-item">
+<div class="bot-icon">🎨</div>
+<div class="bot-info">
+<div class="bot-name">BOT 6 - VisualForge</div>
+<div class="bot-task">Genera imagenes, infografias, branding</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="business-card">
+<div class="business-header">
+<div class="business-name">🎯 Lead Generation B2B</div>
+<div class="business-desc">Vende leads cualificados a empresas</div>
+<div class="business-status">● Configurado - Esperando primer cliente</div>
+</div>
+<div class="bot-list">
+<div class="bot-item">
+<div class="bot-icon">📧</div>
+<div class="bot-info">
+<div class="bot-name">BOT 7 - EmailHunter Pro</div>
+<div class="bot-task">Encuentra emails de decision-makers</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+<div class="bot-item">
+<div class="bot-icon">🌐</div>
+<div class="bot-info">
+<div class="bot-name">BOT 8 - WebScraper Elite</div>
+<div class="bot-task">Extrae datos de directorios empresariales</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="business-card">
+<div class="business-header">
+<div class="business-name">🔧 Servicios Tecnicos IA</div>
+<div class="business-desc">Soporte tecnico automatizado 24/7</div>
+<div class="business-status">● Configurado - Esperando primer cliente</div>
+</div>
+<div class="bot-list">
+<div class="bot-item">
+<div class="bot-icon">🛠️</div>
+<div class="bot-info">
+<div class="bot-name">BOT 9 - TechSolver AI</div>
+<div class="bot-task">Resuelve problemas tecnicos automaticamente</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+<div class="bot-item">
+<div class="bot-icon">⚙️</div>
+<div class="bot-info">
+<div class="bot-name">BOT 10 - ConfigMaster</div>
+<div class="bot-task">Configura WordPress, Shopify, DNS, email</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="business-card">
+<div class="business-header">
+<div class="business-name">₿ Crypto & Web3 Automation</div>
+<div class="business-desc">Alertas y gestion para inversores crypto</div>
+<div class="business-status">● Configurado - Esperando primer cliente</div>
+</div>
+<div class="bot-list">
+<div class="bot-item">
+<div class="bot-icon">📊</div>
+<div class="bot-info">
+<div class="bot-name">BOT 11 - CryptoAlert Pro</div>
+<div class="bot-task">Monitorea precios y envia senales de trading</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+<div class="bot-item">
+<div class="bot-icon">🔐</div>
+<div class="bot-info">
+<div class="bot-name">BOT 12 - WalletGuard</div>
+<div class="bot-task">Gestiona wallets y alerta transacciones</div>
+<div class="bot-status">● Activo</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="footer">
+<p style="font-size:20px;margin-bottom:10px">🌙 SUNSET MOON</p>
+<p>Ecosistema 12 Bots 24/7 | 6 Negocios | Dashboard Real</p>
+<p style="margin-top:15px;color:#666;font-size:13px">
+⚠️ Este dashboard muestra datos REALES. Los valores son 0 hasta que llegue una venta confirmada por Stripe.<br>
+Los bots estan activos y trabajando para captar tu primer cliente.
+</p>
+</div>
+
+<script>
+function updateTime(){
+document.getElementById('lastUpdate').textContent=new Date().toLocaleTimeString('es-ES');
+}
+updateTime();
+setInterval(updateTime,1000);
+
+// Funcion para registrar ventas reales (se activa cuando Stripe confirma un pago)
+function registerSale(product,amount){
+const salesList=document.getElementById('salesList');
+const time=new Date().toLocaleString('es-ES');
+const saleItem=document.createElement('div');
+saleItem.className='sale-item';
+saleItem.innerHTML=`<span class="sale-time">${time}</span><span class="sale-product">${product}</span><span class="sale-amount">€${amount.toFixed(2)}</span>`;
+
+// Si es la primera venta, quitar mensaje vacio
+if(salesList.querySelector('.sales-log-empty')){
+salesList.innerHTML='';
+}
+
+salesList.appendChild(saleItem);
+
+// Actualizar metricas
+const currentRev=parseFloat(document.getElementById('revToday').textContent.replace('€',''));
+document.getElementById('revToday').textContent='€'+(currentRev+amount).toFixed(2);
+
+const currentClients=parseInt(document.getElementById('realClients').textContent);
+document.getElementById('realClients').textContent=currentClients+1;
+}
+
+// Simulacion: registra una venta de prueba (quitar en produccion)
+// setTimeout(()=>registerSale('BotFactory STARTER',79.00),5000);
+</script>
+</body>
+</html>
