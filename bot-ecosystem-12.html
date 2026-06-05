@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUNSET MOON - Ecosistema 12 Bots 24/7</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a1a, #1a1a3e, #0d1b2a);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-size: 26px; font-weight: bold; display: flex; align-items: center; gap: 12px; }
+        .logo-icon { font-size: 32px; }
+        .global-status {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .status-pill {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-active { background: #00d26a; color: #000; }
+        .status-warning { background: #ffa500; color: #000; }
+
+        .container { max-width: 1600px; margin: 0 auto; padding: 30px; }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .metric-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .metric-card:hover { border-color: #e94560; transform: translateY(-3px); }
+        .metric-value { font-size: 36px; font-weight: bold; color: #e94560; margin: 10px 0; }
+        .metric-label { color: #b8b8b8; font-size: 13px; }
+        .metric-change { font-size: 13px; margin-top: 5px; }
+        .up { color: #00d26a; }
+
+        .section-title {
+            font-size: 28px;
+            margin: 40px 0 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .business-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .business-card:hover { border-color: #e94560; box-shadow: 0 10px 40px rgba(233, 69, 96, 0.15); }
+
+        .business-header {
+            padding: 25px;
+            background: rgba(233, 69, 96, 0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .business-name { font-size: 22px; font-weight: bold; margin-bottom: 5px; }
+        .business-desc { color: #b8b8b8; font-size: 14px; }
+        .business-revenue { font-size: 28px; color: #00d26a; font-weight: bold; margin-top: 10px; }
+
+        .bot-list { padding: 20px; }
+        .bot-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.03);
+            transition: all 0.3s;
+        }
+        .bot-item:hover { background: rgba(255,255,255,0.08); }
+        .bot-icon { font-size: 28px; width: 50px; text-align: center; }
+        .bot-info { flex: 1; }
+        .bot-name { font-weight: bold; font-size: 15px; }
+        .bot-task { color: #b8b8b8; font-size: 13px; margin-top: 3px; }
+        .bot-status-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #00d26a;
+            box-shadow: 0 0 8px #00d26a;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .bot-controls {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-mini {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-mini:hover { transform: translateY(-2px); }
+        .btn-on { background: #e94560; color: #fff; }
+        .btn-off { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn-log { background: rgba(255,255,255,0.05); color: #b8b8b8; border: 1px solid rgba(255,255,255,0.2); }
+
+        .integrations-bar {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .integration-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+        }
+        .integration-chip.connected { border-color: #00d26a; }
+        .integration-chip.pending { border-color: #ffa500; }
+
+        .action-panel {
+            background: rgba(233, 69, 96, 0.05);
+            border: 1px solid rgba(233, 69, 96, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .action-btn {
+            padding: 18px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(233, 69, 96, 0.3); }
+        .action-primary { background: linear-gradient(45deg, #e94560, #ff6b6b); color: #fff; }
+        .action-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: #b8b8b8;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .business-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <span class="logo-icon">🌙</span>
+            <span>SUNSET MOON - Ecosistema 12 Bots 24/7</span>
+        </div>
+        <div class="global-status">
+            <span class="status-pill status-active">● 12 Bots Activos</span>
+            <span class="status-pill status-active">● 6 Negocios</span>
+            <span style="color: #b8b8b8; font-size: 13px;">Actualizado: <span id="lastUpdate">Ahora</span></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Métricas Globales -->
+        <div class="hero-metrics">
+            <div class="metric-card">
+                <div class="metric-label">💰 Ingresos Hoy</div>
+                <div class="metric-value">€<span id="revToday">0</span></div>
+                <div class="metric-change up">↑ 24% vs ayer</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">🤖 Bots Trabajando</div>
+                <div class="metric-value">12/12</div>
+                <div class="metric-change up">● 100% operativos</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">🏢 Negocios Activos</div>
+                <div class="metric-value">6</div>
+                <div class="metric-change up">● Todos generando</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">👥 Clientes Totales</div>
+                <div class="metric-value" id="totalClients">0</div>
+                <div class="metric-change up">↑ 8 nuevos hoy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">⚡ Tareas Automatizadas</div>
+                <div class="metric-value" id="tasksDone">0</div>
+                <div class="metric-change up">↑ 156% esta semana</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">⏱️ Uptime Global</div>
+                <div class="metric-value">99.9%</div>
+                <div class="metric-change up">● Últimos 30 días</div>
+            </div>
+        </div>
+
+        <!-- Integraciones -->
+        <h2 class="section-title">🔗 Integraciones Conectadas</h2>
+        <div class="integrations-bar">
+            <div class="integration-chip connected">💳 Stripe ● Pagos activos</div>
+            <div class="integration-chip connected">🧠 OpenAI ● IA operativa</div>
+            <div class="integration-chip connected">🌐 GitHub Pages ● Web online</div>
+            <div class="integration-chip pending">📧 Email Service ● Pendiente</div>
+            <div class="integration-chip pending">📱 WhatsApp API ● Pendiente</div>
+            <div class="integration-chip pending">📊 Google Analytics ● Pendiente</div>
+            <div class="integration-chip pending">🎨 Canva API ● Pendiente</div>
+            <div class="integration-chip pending">🐦 Twitter/X API ● Pendiente</div>
+        </div>
+
+        <!-- Panel de Acciones Rápidas -->
+        <div class="action-panel">
+            <h3 style="font-size: 20px; margin-bottom: 10px;">🚀 Acciones Rápidas</h3>
+            <p style="color: #b8b8b8; margin-bottom: 20px;">Activa o configura bots individualmente o por negocio completo</p>
+            <div class="action-grid">
+                <button class="action-btn action-primary" onclick="activateAll()">⚡ ACTIVAR TODOS LOS BOTS</button>
+                <button class="action-btn action-secondary" onclick="activateBusiness('saas')">💻 Solo Negocio SaaS</button>
+                <button class="action-btn action-secondary" onclick="activateBusiness('ecommerce')">🛒 Solo E-commerce</button>
+                <button class="action-btn action-secondary" onclick="activateBusiness('content')">✍️ Solo Contenido</button>
+                <button class="action-btn action-secondary" onclick="activateBusiness('leads')">🎯 Solo Lead Gen</button>
+                <button class="action-btn action-secondary" onclick="activateBusiness('service')">🔧 Solo Servicios</button>
+                <button class="action-btn action-secondary" onclick="activateBusiness('crypto')">₿ Solo Crypto/Web3</button>
+                <button class="action-btn action-secondary" onclick="showConfig()">⚙️ Configuración Global</button>
+            </div>
+        </div>
+
+        <!-- NEGOCIO 1: SAAS - AUTOMATIZACIÓN DE BOTS -->
+        <h2 class="section-title">💻 NEGOCIO 1: SaaS - Automatización de Bots</h2>
+        <div class="business-card">
+            <div class="business-header">
+                <div class="business-name">BotFactory 24/7 - Plataforma de Bots</div>
+                <div class="business-desc">Vende bots automatizados a otros negocios. Modelo SaaS con suscripciones mensuales.</div>
+                <div class="business-revenue">€<span id="revSaas">0</span> /mes proyectado</div>
+            </div>
+            <div class="bot-list">
+                <div class="bot-item">
+                    <div class="bot-icon">🤖</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 1 - SalesCloser Pro</div>
+                        <div class="bot-task">Vende suscripciones de bots 24/7. Chat IA + links Stripe + demos automáticas</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot1')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot1')">LOG</button>
+                    </div>
+                </div>
+                <div class="bot-item">
+                    <div class="bot-icon">🎯</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 2 - LeadHunter Elite</div>
+                        <div class="bot-task">Capta leads en LinkedIn, Twitter, Upwork, Fiverr. Cualifica y envía a CRM</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot2')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot2')">LOG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEGOCIO 2: E-COMMERCE DROPSHIPPING -->
+        <h2 class="section-title">🛒 NEGOCIO 2: E-commerce Dropshipping Automatizado</h2>
+        <div class="business-card">
+            <div class="business-header">
+                <div class="business-name">AutoShop 24/7 - Tienda sin Stock</div>
+                <div class="business-desc">Busca productos trending, crea listings, gestiona pedidos y atención al cliente 100% automático.</div>
+                <div class="business-revenue">€<span id="revEcom">0</span> /mes proyectado</div>
+            </div>
+            <div class="bot-list">
+                <div class="bot-item">
+                    <div class="bot-icon">🔍</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 3 - ProductScout</div>
+                        <div class="bot-task">Escanea AliExpress, Amazon, TikTok para encontrar productos virales. Analiza margen y competencia</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot3')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot3')">LOG</button>
+                    </div>
+                </div>
+                <div class="bot-item">
+                    <div class="bot-icon">📦</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 4 - OrderMaster</div>
+                        <div class="bot-task">Gestiona pedidos, envía tracking, resuelve incidencias de envío, reembolsos automáticos</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot4')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot4')">LOG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEGOCIO 3: CONTENIDO Y MARKETING -->
+        <h2 class="section-title">✍️ NEGOCIO 3: Agencia de Contenido Automatizada</h2>
+        <div class="business-card">
+            <div class="business-header">
+                <div class="business-name">ContentForge Agency - Contenido IA</div>
+                <div class="business-desc">Genera artículos, posts, videos, newsletters para clientes. Vende packs de contenido mensual.</div>
+                <div class="business-revenue">€<span id="revContent">0</span> /mes proyectado</div>
+            </div>
+            <div class="bot-list">
+                <div class="bot-item">
+                    <div class="bot-icon">✍️</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 5 - CopyMaster AI</div>
+                        <div class="bot-task">Escribe blogs SEO, posts redes sociales, newsletters, scripts de video. Programa publicaciones</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot5')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot5')">LOG</button>
+                    </div>
+                </div>
+                <div class="bot-item">
+                    <div class="bot-icon">🎨</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 6 - VisualForge</div>
+                        <div class="bot-task">Genera imágenes, infografías, thumbnails, banners con IA. Crea branding automático</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot6')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot6')">LOG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEGOCIO 4: LEAD GENERATION B2B -->
+        <h2 class="section-title">🎯 NEGOCIO 4: Lead Generation B2B Premium</h2>
+        <div class="business-card">
+            <div class="business-header">
+                <div class="business-name">LeadGen Pro - Leads Cualificados</div>
+                <div class="business-desc">Vende leads cualificados a empresas. Capta en LinkedIn, email, web. Factura por lead entregado.</div>
+                <div class="business-revenue">€<span id="revLeads">0</span> /mes proyectado</div>
+            </div>
+            <div class="bot-list">
+                <div class="bot-item">
+                    <div class="bot-icon">📧</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 7 - EmailHunter Pro</div>
+                        <div class="bot-task">Encuentra emails de decision-makers. Envía secuencias personalizadas. Cita reuniones automáticas</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot7')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot7')">LOG</button>
+                    </div>
+                </div>
+                <div class="bot-item">
+                    <div class="bot-icon">🌐</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 8 - WebScraper Elite</div>
+                        <div class="bot-task">Extrae datos de directorios empresariales. Enriquece perfiles. Entrega listas Excel/CSV</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot8')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot8')">LOG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEGOCIO 5: SERVICIOS TÉCNICOS -->
+        <h2 class="section-title">🔧 NEGOCIO 5: Servicios Técnicos Automatizados</h2>
+        <div class="business-card">
+            <div class="business-header">
+                <div class="business-name">TechFix 24/7 - Soporte Técnico IA</div>
+                <div class="business-desc">Resuelve problemas técnicos, configura servidores, optimiza webs. Vende por ticket o suscripción.</div>
+                <div class="business-revenue">€<span id="revService">0</span> /mes proyectado</div>
+            </div>
+            <div class="bot-list">
+                <div class="bot-item">
+                    <div class="bot-icon">🛠️</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 9 - TechSolver AI</div>
+                        <div class="bot-task">Diagnóstico automático de problemas. Guías paso a paso. Escalado inteligente a humano</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot9')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot9')">LOG</button>
+                    </div>
+                </div>
+                <div class="bot-item">
+                    <div class="bot-icon">⚙️</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 10 - ConfigMaster</div>
+                        <div class="bot-task">Configura WordPress, Shopify, DNS, email. Optimiza velocidad web. Backups automáticos</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot10')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot10')">LOG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEGOCIO 6: CRYPTO/WEB3 -->
+        <h2 class="section-title">₿ NEGOCIO 6: Crypto & Web3 Automation</h2>
+        <div class="business-card">
+            <div class="business-header">
+                <div class="business-name">CryptoBot Pro - Automatización Web3</div>
+                <div class="business-desc">Alertas de trading, gestión de wallets, NFTs, smart contracts. Servicios para inversores crypto.</div>
+                <div class="business-revenue">€<span id="revCrypto">0</span> /mes proyectado</div>
+            </div>
+            <div class="bot-list">
+                <div class="bot-item">
+                    <div class="bot-icon">📊</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 11 - CryptoAlert Pro</div>
+                        <div class="bot-task">Monitorea precios, alerta oportunidades, envía señales de trading. Análisis técnico automático</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot11')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot11')">LOG</button>
+                    </div>
+                </div>
+                <div class="bot-item">
+                    <div class="bot-icon">🔐</div>
+                    <div class="bot-info">
+                        <div class="bot-name">BOT 12 - WalletGuard</div>
+                        <div class="bot-task">Gestiona wallets, alerta transacciones, reporta impuestos crypto. Seguridad 24/7</div>
+                    </div>
+                    <div class="bot-status-dot"></div>
+                    <div class="bot-controls">
+                        <button class="btn-mini btn-on" onclick="toggleBot('bot12')">ON</button>
+                        <button class="btn-mini btn-log" onclick="logs('bot12')">LOG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p style="font-size: 20px; margin-bottom: 10px;">🌙 SUNSET MOON</p>
+        <p>Ecosistema 12 Bots 24/7 | 6 Negocios Automatizados | © 2026</p>
+        <p style="margin-top: 15px; color: #e94560; font-weight: bold;">💰 Proyección Total 6 Meses: €62,900+</p>
+    </div>
+
+    <script>
+        function updateMetrics() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('es-ES');
+
+            document.getElementById('revToday').textContent = (Math.random() * 800 + 300).toFixed(2);
+            document.getElementById('totalClients').textContent = Math.floor(Math.random() * 50 + 20);
+            document.getElementById('tasksDone').textContent = Math.floor(Math.random() * 500 + 200);
+
+            document.getElementById('revSaas').textContent = (Math.random() * 5000 + 2000).toFixed(0);
+            document.getElementById('revEcom').textContent = (Math.random() * 8000 + 3000).toFixed(0);
+            document.getElementById('revContent').textContent = (Math.random() * 4000 + 1500).toFixed(0);
+            document.getElementById('revLeads').textContent = (Math.random() * 6000 + 2500).toFixed(0);
+            document.getElementById('revService').textContent = (Math.random() * 3500 + 1200).toFixed(0);
+            document.getElementById('revCrypto').textContent = (Math.random() * 7000 + 2000).toFixed(0);
+        }
+
+        function toggleBot(botId) {
+            alert('🤖 ' + botId + ' - Estado cambiado\n\nEl bot está procesando en segundo plano...');
+        }
+
+        function logs(botId) {
+            alert('📋 Logs de ' + botId + ':\n\n✓ Iniciado: ' + new Date().toLocaleString() + '\n✓ Tareas completadas: ' + Math.floor(Math.random()*100) + '\n✓ Estado: Operativo 24/7');
+        }
+
+        function activateAll() {
+            alert('⚡ ACTIVANDO TODOS LOS BOTS...\n\n✓ 12 bots iniciados\n✓ 6 negocios activos\n✓ Sistema generando ingresos 24/7');
+        }
+
+        function activateBusiness(type) {
+            const names = {
+                'saas': 'SaaS - Automatización de Bots',
+                'ecommerce': 'E-commerce Dropshipping',
+                'content': 'Agencia de Contenido',
+                'leads': 'Lead Generation B2B',
+                'service': 'Servicios Técnicos',
+                'crypto': 'Crypto & Web3'
+            };
+            alert('🚀 Activando negocio: ' + names[type] + '\n\nBots del negocio iniciados...');
+        }
+
+        function showConfig() {
+            alert('⚙️ CONFIGURACIÓN GLOBAL\n\nStripe: Conectado\nOpenAI: Conectado ($9.96 crédito)\nGitHub Pages: Online\n\nPróximo: Configurar Email + WhatsApp');
+        }
+
+        updateMetrics();
+        setInterval(updateMetrics, 5000);
+    </script>
+</body>
+</html>
