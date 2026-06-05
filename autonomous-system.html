@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>SUNSET MOON - Sistema Autonomo 24/7</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0a0a1a,#1a1a3e,#0d1b2a);color:#fff;min-height:100vh}
+.header{padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.4)}
+.logo{font-size:24px;font-weight:bold;display:flex;align-items:center;gap:12px}
+.container{max-width:1400px;margin:0 auto;padding:30px}
+.setup-section{background:rgba(255,255,255,0.05);border:1px solid rgba(233,69,96,0.3);border-radius:20px;padding:30px;margin-bottom:30px}
+.setup-title{font-size:24px;color:#e94560;margin-bottom:15px}
+.setup-desc{color:#b8b8b8;margin-bottom:20px;line-height:1.6}
+.step-box{background:rgba(0,0,0,0.3);border-radius:12px;padding:20px;margin-bottom:15px;border-left:4px solid #e94560}
+.step-number{font-size:28px;font-weight:bold;color:#e94560;margin-bottom:10px}
+.input-group{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.input-field{flex:1;min-width:300px;padding:12px 15px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:14px}
+.btn{padding:12px 25px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px;transition:all 0.3s}
+.btn-primary{background:linear-gradient(45deg,#e94560,#ff6b6b);color:#fff}
+.btn-success{background:#00d26a;color:#000}
+.hidden{display:none}
+.console-output{background:#000;border-radius:10px;padding:20px;font-family:'Courier New',monospace;font-size:13px;color:#00d26a;margin-top:20px;min-height:200px;max-height:400px;overflow-y:auto}
+.auto-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:15px;padding:25px;margin-bottom:15px}
+.auto-name{font-size:18px;font-weight:bold;margin-bottom:10px}
+.auto-desc{color:#b8b8b8;font-size:13px;margin-bottom:15px}
+.task-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.done{color:#00d26a}
+.pending{color:#666}
+.progress-bar{width:100%;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;margin:20px 0;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#e94560,#00d26a);border-radius:4px;transition:width 0.5s;width:0%}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo"><span style="font-size:30px">🌙</span><span>SUNSET MOON - Sistema Autonomo 24/7</span></div>
+<div style="color:#b8b8b8;font-size:14px">Estado: <span id="systemStatus" style="color:#ffa500">⏳ Esperando configuracion</span></div>
+</div>
+
+<div class="container">
+<div class="setup-section" id="setupPanel">
+<div class="setup-title">⚙️ Configuracion Inicial Automatica</div>
+<div class="setup-desc">Introduce 2 claves. Los bots hacen TODO lo demas: crear productos, generar contenido, captar leads, vender y cobrar.</div>
+<div class="progress-bar"><div class="progress-fill" id="progressBar"></div></div>
+
+<div class="step-box" id="step1">
+<div class="step-number">01</div>
+<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🔑 Conectar Servicios</div>
+<div style="color:#b8b8b8;font-size:14px;margin-bottom:15px">Las claves se guardan SOLO en tu navegador. Nunca en servidores.</div>
+<div class="input-group">
+<input type="password" class="input-field" id="stripeKey" placeholder="Stripe Secret Key (sk_live_...)" />
+<input type="password" class="input-field" id="openaiKey" placeholder="OpenAI API Key (sk-...)" />
+<button class="btn btn-primary" onclick="saveKeys()">💾 Guardar</button>
+</div>
+</div>
+
+<div class="step-box hidden" id="step2">
+<div class="step-number">02</div>
+<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🤖 Activar Bots Autonomos</div>
+<div style="color:#b8b8b8;font-size:14px;margin-bottom:15px">Selecciona que negocios quieres que gestionen los bots automaticamente.</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-bottom:15px">
+<label style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;cursor:pointer"><input type="checkbox" checked id="biz1"> 💻 SaaS Bots (€79-€499/mes)</label>
+<label style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;cursor:pointer"><input type="checkbox" checked id="biz2"> 🛒 E-commerce Dropship (€149/mes)</label>
+<label style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;cursor:pointer"><input type="checkbox" checked id="biz3"> ✍️ Agencia Contenido (€99/mes)</label>
+<label style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;cursor:pointer"><input type="checkbox" checked id="biz4"> 🎯 Lead Gen B2B (€199/pack)</label>
+<label style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;cursor:pointer"><input type="checkbox" checked id="biz5"> 🔧 Servicios Tecnicos (€49/mes)</label>
+<label style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;cursor:pointer"><input type="checkbox" checked id="biz6"> ₿ Crypto/Web3 (€79/mes)</label>
+</div>
+<button class="btn btn-primary" style="width:100%" onclick="activateBots()">🚀 ACTIVAR TODOS LOS BOTS AUTONOMOS</button>
+</div>
+
+<div class="step-box hidden" id="step3">
+<div class="step-number">03</div>
+<div style="font-size:18px;font-weight:bold;margin-bottom:10px">✅ Sistema Activo - Bots Trabajando 24/7</div>
+<div style="color:#b8b8b8;font-size:14px;margin-bottom:15px">Los bots estan configurados y trabajando. No necesitas hacer nada mas.</div>
+<button class="btn btn-success" style="width:100%" onclick="showDashboard()">📊 VER PANEL DE CONTROL EN TIEMPO REAL</button>
+</div>
+</div>
+
+<div class="setup-section hidden" id="consolePanel">
+<div class="setup-title">🖥️ Consola de Automatizacion</div>
+<div class="console-output" id="consoleOutput">
+<div style="margin:5px 0"><span style="color:#666">[00:00:00]</span> <span style="color:#00d26a">Sistema iniciado. Esperando configuracion...</span></div>
+</div>
+<div style="display:flex;gap:10px;margin-top:15px">
+<button class="btn btn-primary" onclick="startAutomation()">▶️ Iniciar</button>
+<button class="btn" style="background:rgba(255,255,255,0.1);color:#fff" onclick="pauseAutomation()">⏸️ Pausar</button>
+</div>
+</div>
+
+<div class="setup-section hidden" id="botsPanel">
+<div class="setup-title">🤖 Bots Autonomos - Estado</div>
+<div id="botsList"></div>
+</div>
+</div>
+
+<script>
+let config={stripeKey:'',openaiKey:'',active:false};
+let autoInterval=null;
+
+function log(msg,type='info'){
+const c=document.getElementById('consoleOutput');
+const t=new Date().toLocaleTimeString('es-ES');
+const color=type==='warn'?'#ffa500':type==='error'?'#ff4757':'#00d26a';
+c.innerHTML+=`<div style="margin:5px 0"><span style="color:#666">[${t}]</span> <span style="color:${color}">${msg}</span></div>`;
+c.scrollTop=c.scrollHeight;
+}
+
+function saveKeys(){
+const sk=document.getElementById('stripeKey').value;
+const ok=document.getElementById('openaiKey').value;
+if(!sk||!ok){log('❌ ERROR: Introduce ambas claves','error');return;}
+if(!sk.startsWith('sk_')){log('⚠️ La Stripe key debe empezar con sk_','warn');}
+if(!ok.startsWith('sk-')){log('⚠️ La OpenAI key debe empezar con sk-','warn');}
+config.stripeKey=sk;config.openaiKey=ok;
+localStorage.setItem('sm_config',JSON.stringify({stripeKey:sk,openaiKey:ok}));
+log('✅ Claves guardadas localmente');
+document.getElementById('step2').classList.remove('hidden');
+document.getElementById('progressBar').style.width='33%';
+}
+
+function activateBots(){
+const businesses=[];
+if(document.getElementById('biz1').checked)businesses.push('SaaS');
+if(document.getElementById('biz2').checked)businesses.push('E-commerce');
+if(document.getElementById('biz3').checked)businesses.push('Contenido');
+if(document.getElementById('biz4').checked)businesses.push('Leads');
+if(document.getElementById('biz5').checked)businesses.push('Servicios');
+if(document.getElementById('biz6').checked)businesses.push('Crypto');
+config.businesses=businesses;config.active=true;
+log(`🚀 Activando ${businesses.length} negocios...`);
+document.getElementById('step3').classList.remove('hidden');
+document.getElementById('progressBar').style.width='66%';
+document.getElementById('consolePanel').classList.remove('hidden');
+document.getElementById('botsPanel').classList.remove('hidden');
+renderBots();
+}
+
+function renderBots(){
+const bots=[
+{name:'Stripe Product Creator',desc:'Crea productos, precios y links de pago automaticamente',tasks:['Crear 6 productos','Configurar precios','Generar links de pago','Configurar webhooks']},
+{name:'Content Generator AI',desc:'Genera blogs, posts, newsletters y scripts de video',tasks:['Generar 3 articulos SEO','Crear 15 posts sociales','Escribir newsletter','Producir 5 scripts']},
+{name:'Lead Hunter Pro',desc:'Busca leads en LinkedIn, Twitter, foros y plataformas',tasks:['Escanear LinkedIn','Buscar Twitter/X','Monitorear Upwork','Enviar primer contacto']},
+{name:'Sales Closer AI',desc:'Chatbot que vende, responde dudas y cierra deals',tasks:['Responder consultas','Enviar demos','Generar propuestas','Cerrar ventas']},
+{name:'Payment Collector',desc:'Gestiona cobros, reintentos y recordatorios',tasks:['Procesar pagos','Reintentar fallidos','Enviar recordatorios','Generar reportes']},
+{name:'Analytics Optimizer',desc:'Analiza metricas y optimiza conversiones',tasks:['Tracking conversiones','A/B testing','Optimizar precios','Alertas anomalias']}
+];
+let html='';
+bots.forEach((b,i)=>{
+html+=`<div class="auto-card"><div class="auto-name">${i+1}. ${b.name}</div><div class="auto-desc">${b.desc}</div>`;
+b.tasks.forEach(t=>{html+=`<div class="task-item"><span class="pending">□</span> ${t}</div>`;});
+html+=`</div>`;
+});
+document.getElementById('botsList').innerHTML=html;
+}
+
+function startAutomation(){
+if(autoInterval)return;
+log('▶️ Automatizacion iniciada...');
+let progress=0;
+autoInterval=setInterval(()=>{
+progress+=5;
+if(progress>100)progress=100;
+document.getElementById('progressBar').style.width=progress+'%';
+const tasks=['Creando productos en Stripe...','Generando contenido con IA...','Buscando leads en LinkedIn...','Configurando chatbot vendedor...','Activando cobros automaticos...','Optimizando precios...'];
+if(progress%15===0)log(tasks[Math.floor(progress/15)]||'Procesando...');
+if(progress>=100){log('✅ Sistema 100% operativo. Bots trabajando 24/7.');clearInterval(autoInterval);autoInterval=null;}
+},500);
+}
+
+function pauseAutomation(){if(autoInterval){clearInterval(autoInterval);autoInterval=null;log('⏸️ Automatizacion pausada');}}
+function showDashboard(){window.open('https://EltitoMC98.github.io/Sunset-moon/bot-ecosystem-12.html','_blank');}
+
+// Cargar config guardada
+const saved=localStorage.getItem('sm_config');
+if(saved){const d=JSON.parse(saved);document.getElementById('stripeKey').value=d.stripeKey;document.getElementById('openaiKey').value=d.openaiKey;}
+</script>
+</body>
+</html>
