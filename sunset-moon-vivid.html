@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUNSET MOON — Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8fafc;
+  --bg-card:#ffffff;
+  --bg-card-hover:#ffffff;
+  --bg-elevated:#ffffff;
+  --border:#e2e8f0;
+  --border-hover:#cbd5e1;
+  --text-primary:#0f172a;
+  --text-secondary:#475569;
+  --text-muted:#94a3b8;
+  --text-inverse:#ffffff;
+
+  --accent-rose:#e11d48;
+  --accent-rose-light:#fecdd3;
+  --accent-rose-glow:rgba(225,29,72,0.15);
+
+  --accent-blue:#0ea5e9;
+  --accent-blue-light:#bae6fd;
+  --accent-blue-glow:rgba(14,165,233,0.15);
+
+  --accent-violet:#8b5cf6;
+  --accent-violet-light:#ddd6fe;
+  --accent-violet-glow:rgba(139,92,246,0.15);
+
+  --accent-emerald:#10b981;
+  --accent-emerald-light:#a7f3d0;
+  --accent-emerald-glow:rgba(16,185,129,0.15);
+
+  --accent-amber:#f59e0b;
+  --accent-amber-light:#fde68a;
+  --accent-amber-glow:rgba(245,158,11,0.15);
+
+  --accent-cyan:#06b6d4;
+  --accent-cyan-light:#a5f3fc;
+  --accent-cyan-glow:rgba(6,182,212,0.15);
+
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 4px 6px -1px rgba(0,0,0,0.06),0 2px 4px -2px rgba(0,0,0,0.04);
+  --shadow-md:0 10px 15px -3px rgba(0,0,0,0.08),0 4px 6px -4px rgba(0,0,0,0.04);
+  --shadow-lg:0 20px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.04);
+  --shadow-xl:0 25px 50px -12px rgba(0,0,0,0.15);
+
+  --radius-sm:8px;
+  --radius:12px;
+  --radius-md:16px;
+  --radius-lg:20px;
+  --radius-xl:24px;
+
+  --font-main:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-main);
+  background:var(--bg);
+  color:var(--text-primary);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* Animated gradient orbs background */
+.bg-orb{
+  position:fixed;border-radius:50%;
+  filter:blur(80px);
+  pointer-events:none;z-index:0;
+  animation:orbFloat 20s ease-in-out infinite;
+}
+.orb-1{
+  width:600px;height:600px;
+  background:linear-gradient(135deg,rgba(225,29,72,0.12),rgba(245,158,11,0.08));
+  top:-10%;left:-5%;
+  animation-delay:0s;
+}
+.orb-2{
+  width:500px;height:500px;
+  background:linear-gradient(135deg,rgba(14,165,233,0.1),rgba(139,92,246,0.08));
+  top:20%;right:-10%;
+  animation-delay:5s;
+}
+.orb-3{
+  width:700px;height:700px;
+  background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(6,182,212,0.06));
+  bottom:-15%;left:30%;
+  animation-delay:10s;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(30px,-20px) scale(1.05)}
+  50%{transform:translate(-20px,30px) scale(0.95)}
+  75%{transform:translate(20px,20px) scale(1.02)}
+}
+
+/* Grid pattern overlay */
+.bg-grid{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background-image:
+    linear-gradient(rgba(148,163,184,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(148,163,184,0.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;z-index:0;
+}
+
+/* Header */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(248,250,252,0.85);
+  backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  padding:0 32px;
+  height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo-group{display:flex;align-items:center;gap:14px}
+.logo-icon{
+  width:40px;height:40px;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--accent-rose),var(--accent-violet));
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;box-shadow:0 4px 14px var(--accent-rose-glow);
+  animation:logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{box-shadow:0 4px 14px var(--accent-rose-glow)}
+  50%{box-shadow:0 4px 24px var(--accent-rose-glow),0 0 40px rgba(225,29,72,0.1)}
+}
+.logo-text{line-height:1.2}
+.logo-title{font-size:17px;font-weight:800;letter-spacing:-0.3px;color:var(--text-primary)}
+.logo-sub{font-size:10px;color:var(--text-muted);font-weight:600;letter-spacing:2px;text-transform:uppercase}
+
+.header-right{display:flex;align-items:center;gap:16px}
+
+.status-pill{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 16px;border-radius:30px;
+  font-size:12px;font-weight:600;
+  background:var(--accent-emerald-light);color:var(--accent-emerald);
+  border:1px solid rgba(16,185,129,0.2);
+}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--accent-emerald);
+  box-shadow:0 0 8px var(--accent-emerald);animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.time-display{
+  font-family:var(--font-mono);font-size:13px;color:var(--text-muted);
+  background:var(--bg-card);padding:8px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);box-shadow:var(--shadow-sm);
+}
+
+/* Main */
+.main-container{
+  position:relative;z-index:1;
+  padding:88px 32px 32px;
+  max-width:1440px;margin:0 auto;
+}
+
+/* Hero */
+.hero{margin-bottom:36px;padding:20px 0}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;border-radius:30px;
+  background:var(--accent-rose-light);color:var(--accent-rose);
+  font-size:12px;font-weight:700;letter-spacing:0.5px;
+  margin-bottom:16px;border:1px solid rgba(225,29,72,0.15);
+}
+.hero-title{
+  font-size:40px;font-weight:800;letter-spacing:-1.5px;
+  background:linear-gradient(135deg,var(--text-primary),var(--accent-violet));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:12px;line-height:1.1;
+}
+.hero-subtitle{color:var(--text-secondary);font-size:16px;max-width:560px;line-height:1.6}
+
+/* Metrics */
+.metrics-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;margin-bottom:40px;
+}
+.metric-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:24px;
+  position:relative;overflow:hidden;
+  transition:all 0.35s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:var(--shadow);
+}
+.metric-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-lg);
+}
+.metric-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  opacity:0.8;
+}
+.metric-card.rose::after{background:linear-gradient(90deg,var(--accent-rose),var(--accent-amber))}
+.metric-card.blue::after{background:linear-gradient(90deg,var(--accent-blue),var(--accent-cyan))}
+.metric-card.violet::after{background:linear-gradient(90deg,var(--accent-violet),var(--accent-rose))}
+.metric-card.emerald::after{background:linear-gradient(90deg,var(--accent-emerald),var(--accent-cyan))}
+.metric-card.amber::after{background:linear-gradient(90deg,var(--accent-amber),var(--accent-rose))}
+.metric-card.cyan::after{background:linear-gradient(90deg,var(--accent-cyan),var(--accent-blue))}
+
+.metric-icon{
+  width:44px;height:44px;border-radius:var(--radius);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:14px;
+  background:var(--accent-rose-light);border:1px solid rgba(225,29,72,0.12);
+}
+.metric-icon.blue{background:var(--accent-blue-light);border-color:rgba(14,165,233,0.12)}
+.metric-icon.violet{background:var(--accent-violet-light);border-color:rgba(139,92,246,0.12)}
+.metric-icon.emerald{background:var(--accent-emerald-light);border-color:rgba(16,185,129,0.12)}
+.metric-icon.amber{background:var(--accent-amber-light);border-color:rgba(245,158,11,0.12)}
+.metric-icon.cyan{background:var(--accent-cyan-light);border-color:rgba(6,182,212,0.12)}
+
+.metric-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px}
+.metric-value{font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
+.metric-value.rose{color:var(--accent-rose)}
+.metric-value.blue{color:var(--accent-blue)}
+.metric-value.violet{color:var(--accent-violet)}
+.metric-value.emerald{color:var(--accent-emerald)}
+.metric-value.amber{color:var(--accent-amber)}
+.metric-value.cyan{color:var(--accent-cyan)}
+
+.metric-change{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.metric-change.up{color:var(--accent-emerald)}
+.metric-change.down{color:var(--accent-rose)}
+
+/* Section headers */
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.section-title{
+  font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px;
+  color:var(--text-primary);
+}
+.section-title .icon{font-size:24px}
+.section-count{
+  background:var(--accent-rose);color:var(--text-inverse);
+  padding:4px 12px;border-radius:20px;
+  font-size:12px;font-weight:700;
+}
+
+/* AI Generator */
+.ai-section{
+  background:linear-gradient(135deg,var(--bg-card),var(--accent-violet-light));
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  padding:28px;
+  margin-bottom:36px;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow-md);
+}
+.ai-section::before{
+  content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 70%);
+}
+.ai-header{position:relative;z-index:1;margin-bottom:20px}
+.ai-title{font-size:22px;font-weight:800;margin-bottom:6px;color:var(--text-primary)}
+.ai-title span{background:linear-gradient(135deg,var(--accent-violet),var(--accent-rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ai-desc{color:var(--text-secondary);font-size:14px}
+
+.ai-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;position:relative;z-index:1}
+.ai-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:22px;
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+  cursor:pointer;box-shadow:var(--shadow-sm);
+}
+.ai-card:hover{
+  transform:translateY(-3px) scale(1.01);
+  border-color:var(--accent-violet);
+  box-shadow:var(--shadow-md),0 0 30px var(--accent-violet-glow);
+}
+.ai-card-icon{
+  width:48px;height:48px;border-radius:var(--radius);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:12px;
+  background:linear-gradient(135deg,var(--accent-violet),var(--accent-rose));
+  box-shadow:0 4px 16px var(--accent-violet-glow);
+}
+.ai-card-title{font-size:15px;font-weight:700;margin-bottom:6px;color:var(--text-primary)}
+.ai-card-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:14px}
+.ai-card-btn{
+  width:100%;padding:12px;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--accent-violet),var(--accent-rose));
+  color:var(--text-inverse);border:none;font-size:13px;font-weight:700;cursor:pointer;
+  transition:all 0.3s;box-shadow:0 4px 14px var(--accent-violet-glow);
+}
+.ai-card-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px var(--accent-violet-glow)}
+
+/* Terminal */
+.terminal{
+  background:#0f172a;
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  overflow:hidden;margin-bottom:36px;
+  box-shadow:var(--shadow-xl);
+}
+.terminal-header{
+  background:rgba(255,255,255,0.03);
+  padding:12px 20px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.terminal-dot{width:12px;height:12px;border-radius:50%}
+.terminal-dot.red{background:#ff5f56}
+.terminal-dot.yellow{background:#ffbd2e}
+.terminal-dot.green{background:#27c93f}
+.terminal-title{font-size:12px;color:var(--text-muted);font-family:var(--font-mono)}
+.terminal-body{
+  padding:20px;
+  font-family:var(--font-mono);font-size:13px;
+  max-height:280px;overflow-y:auto;
+  line-height:1.8;color:#e2e8f0;
+}
+.terminal-line{margin:4px 0}
+.terminal-time{color:#475569}
+.terminal-info{color:var(--accent-cyan)}
+.terminal-success{color:var(--accent-emerald)}
+.terminal-warn{color:var(--accent-amber)}
+.terminal-error{color:var(--accent-rose)}
+
+/* Platforms */
+.platforms-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
+  gap:20px;margin-bottom:40px;
+}
+.platform-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  overflow:hidden;
+  transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:var(--shadow);
+}
+.platform-card:hover{
+  transform:translateY(-6px) scale(1.005);
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-xl);
+}
+
+.platform-header{
+  padding:24px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,0.8),rgba(255,255,255,0.4));
+}
+.platform-header::after{
+  content:'';position:absolute;top:0;right:0;width:180px;height:180px;
+  background:radial-gradient(circle,rgba(225,29,72,0.08) 0%,transparent 70%);
+  border-radius:50%;transform:translate(30%,-30%);
+}
+.platform-header.blue::after{background:radial-gradient(circle,rgba(14,165,233,0.08) 0%,transparent 70%)}
+.platform-header.violet::after{background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 70%)}
+.platform-header.emerald::after{background:radial-gradient(circle,rgba(16,185,129,0.08) 0%,transparent 70%)}
+.platform-header.amber::after{background:radial-gradient(circle,rgba(245,158,11,0.08) 0%,transparent 70%)}
+.platform-header.cyan::after{background:radial-gradient(circle,rgba(6,182,212,0.08) 0%,transparent 70%)}
+
+.platform-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;position:relative;z-index:1}
+.platform-icon-bg{
+  width:52px;height:52px;border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  background:linear-gradient(135deg,var(--accent-rose),var(--accent-amber));
+  box-shadow:0 6px 20px var(--accent-rose-glow);
+}
+.platform-icon-bg.blue{background:linear-gradient(135deg,var(--accent-blue),var(--accent-cyan));box-shadow:0 6px 20px var(--accent-blue-glow)}
+.platform-icon-bg.violet{background:linear-gradient(135deg,var(--accent-violet),var(--accent-rose));box-shadow:0 6px 20px var(--accent-violet-glow)}
+.platform-icon-bg.emerald{background:linear-gradient(135deg,var(--accent-emerald),var(--accent-cyan));box-shadow:0 6px 20px var(--accent-emerald-glow)}
+.platform-icon-bg.amber{background:linear-gradient(135deg,var(--accent-amber),var(--accent-rose));box-shadow:0 6px 20px var(--accent-amber-glow)}
+.platform-icon-bg.cyan{background:linear-gradient(135deg,var(--accent-cyan),var(--accent-blue));box-shadow:0 6px 20px var(--accent-cyan-glow)}
+
+.platform-status{
+  padding:6px 14px;border-radius:20px;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;
+  background:var(--accent-emerald-light);border:1px solid rgba(16,185,129,0.2);color:var(--accent-emerald);
+}
+.platform-status.pending{background:var(--accent-amber-light);border-color:rgba(245,158,11,0.2);color:var(--accent-amber)}
+
+.platform-name{font-size:20px;font-weight:800;margin-bottom:4px;position:relative;z-index:1;color:var(--text-primary)}
+.platform-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;position:relative;z-index:1}
+
+.platform-body{padding:0 24px 24px}
+
+.gig-item{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:18px;
+  margin-bottom:10px;
+  transition:all 0.3s;
+  position:relative;overflow:hidden;
+}
+.gig-item:hover{
+  background:var(--bg-card);
+  border-color:var(--border-hover);
+  transform:translateX(4px);
+  box-shadow:var(--shadow-md);
+}
+.gig-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--accent-rose),var(--accent-amber));
+  border-radius:var(--radius-md) 0 0 var(--radius-md);
+  opacity:0;transition:opacity 0.3s;
+}
+.gig-item:hover::before{opacity:1}
+
+.gig-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.gig-title{font-weight:700;font-size:14px;line-height:1.4;color:var(--text-primary)}
+.gig-price{
+  font-family:var(--font-mono);font-size:15px;font-weight:700;
+  color:var(--accent-rose);white-space:nowrap;
+}
+.gig-desc{font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:12px}
+
+.gig-actions{display:flex;gap:8px;flex-wrap:wrap}
+.gig-btn{
+  padding:8px 16px;border-radius:var(--radius-sm);
+  font-size:12px;font-weight:700;cursor:pointer;
+  border:none;transition:all 0.3s;
+  display:flex;align-items:center;gap:6px;
+}
+.gig-btn-primary{
+  background:linear-gradient(135deg,var(--accent-rose),var(--accent-violet));
+  color:var(--text-inverse);box-shadow:0 4px 14px var(--accent-rose-glow);
+}
+.gig-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--accent-rose-glow)}
+.gig-btn-secondary{
+  background:var(--bg);color:var(--text-secondary);
+  border:1px solid var(--border);
+}
+.gig-btn-secondary:hover{background:var(--bg-card);color:var(--text-primary);border-color:var(--border-hover)}
+
+/* Revenue */
+.revenue-section{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  padding:28px;
+  margin-bottom:36px;
+  box-shadow:var(--shadow);
+}
+.revenue-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.revenue-title{font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px;color:var(--text-primary)}
+.revenue-total{font-family:var(--font-mono);font-size:28px;font-weight:800;color:var(--accent-emerald)}
+.revenue-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.revenue-item{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);padding:16px;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:all 0.3s;
+}
+.revenue-item:hover{border-color:var(--border-hover);background:var(--bg-card);box-shadow:var(--shadow-sm)}
+.revenue-platform{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--text-primary)}
+.revenue-amount{font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--accent-blue)}
+
+/* Footer */
+.footer{
+  text-align:center;padding:40px;color:var(--text-muted);
+  border-top:1px solid var(--border);margin-top:50px;
+  background:var(--bg-card);
+}
+.footer-logo{font-size:28px;margin-bottom:12px}
+.footer-text{font-size:14px;margin-bottom:8px;color:var(--text-secondary)}
+.footer-links{display:flex;justify-content:center;gap:24px;margin-top:20px}
+.footer-link{color:var(--text-secondary);text-decoration:none;font-size:13px;transition:all 0.3s;font-weight:600}
+.footer-link:hover{color:var(--accent-rose)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-hover)}
+
+/* Responsive */
+@media(max-width:768px){
+  .header{padding:0 16px}
+  .main-container{padding:76px 16px 16px}
+  .hero-title{font-size:28px}
+  .platforms-grid{grid-template-columns:1fr}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .revenue-grid{grid-template-columns:1fr}
+  .ai-grid{grid-template-columns:1fr}
+}
+
+/* Animations */
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.animate-in{animation:fadeInUp 0.5s ease-out forwards;opacity:0}
+.delay-1{animation-delay:0.1s}
+.delay-2{animation-delay:0.2s}
+.delay-3{animation-delay:0.3s}
+.delay-4{animation-delay:0.4s}
+</style>
+</head>
+<body>
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+<div class="bg-grid"></div>
+
+<header class="header">
+  <div class="logo-group">
+    <div class="logo-icon">🌙</div>
+    <div class="logo-text">
+      <div class="logo-title">SUNSET MOON</div>
+      <div class="logo-sub">Command Center</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-pill">
+      <div class="status-dot"></div>
+      <span>12 Bots Online</span>
+    </div>
+    <div class="time-display" id="clock">00:00:00</div>
+  </div>
+</header>
+
+<main class="main-container">
+  <section class="hero animate-in">
+    <div class="hero-badge">🚀 Sistema Activo</div>
+    <h1 class="hero-title">Ecosistema Neural 24/7</h1>
+    <p class="hero-subtitle">12 bots inteligentes gestionando 6 negocios en paralelo. Genera ingresos automaticamente mientras duermes.</p>
+  </section>
+
+  <div class="metrics-grid">
+    <div class="metric-card rose animate-in delay-1">
+      <div class="metric-icon">💰</div>
+      <div class="metric-label">Ingresos Reales</div>
+      <div class="metric-value rose" id="revTotal">€0.00</div>
+      <div class="metric-change">Actualiza manualmente</div>
+    </div>
+    <div class="metric-card blue animate-in delay-1">
+      <div class="metric-icon blue">🤖</div>
+      <div class="metric-label">Bots Activos</div>
+      <div class="metric-value blue">12/12</div>
+      <div class="metric-change up">● 100% operativos</div>
+    </div>
+    <div class="metric-card violet animate-in delay-2">
+      <div class="metric-icon violet">🏢</div>
+      <div class="metric-label">Negocios</div>
+      <div class="metric-value violet">6</div>
+      <div class="metric-change up">● Todos activos</div>
+    </div>
+    <div class="metric-card emerald animate-in delay-2">
+      <div class="metric-icon emerald">👥</div>
+      <div class="metric-label">Clientes</div>
+      <div class="metric-value emerald" id="clientCount">0</div>
+      <div class="metric-change">Solo pagos confirmados</div>
+    </div>
+    <div class="metric-card amber animate-in delay-3">
+      <div class="metric-icon amber">⚡</div>
+      <div class="metric-label">Gigs Generados</div>
+      <div class="metric-value amber" id="gigCount">0/18</div>
+      <div class="metric-change">Meta: 18 en 6 plataformas</div>
+    </div>
+    <div class="metric-card cyan animate-in delay-3">
+      <div class="metric-icon cyan">⏱️</div>
+      <div class="metric-label">Uptime</div>
+      <div class="metric-value cyan">99.9%</div>
+      <div class="metric-change up">● Desde activacion</div>
+    </div>
+  </div>
+
+  <section class="ai-section animate-in delay-4">
+    <div class="ai-header">
+      <div class="ai-title">🧠 <span>Generador IA de Gigs</span></div>
+      <div class="ai-desc">Los bots crean automaticamente el contenido de tus gigs. Tu solo copias y pegas en cada plataforma.</div>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-card" onclick="generateGig('chatbot')">
+        <div class="ai-card-icon">🤖</div>
+        <div class="ai-card-title">Chatbot IA para Negocios</div>
+        <div class="ai-card-desc">Genera titulo, descripcion, precios y FAQ para un gig de chatbot con IA.</div>
+        <button class="ai-card-btn">✨ Generar Contenido</button>
+      </div>
+      <div class="ai-card" onclick="generateGig('content')">
+        <div class="ai-card-icon">✍️</div>
+        <div class="ai-card-title">Contenido para Redes Sociales</div>
+        <div class="ai-card-desc">Genera titulo, descripcion, precios y FAQ para un gig de contenido IA.</div>
+        <button class="ai-card-btn">✨ Generar Contenido</button>
+      </div>
+      <div class="ai-card" onclick="generateGig('automation')">
+        <div class="ai-card-icon">⚙️</div>
+        <div class="ai-card-title">Automatizacion de Procesos</div>
+        <div class="ai-card-desc">Genera titulo, descripcion, precios y FAQ para un gig de automatizacion.</div>
+        <button class="ai-card-btn">✨ Generar Contenido</button>
+      </div>
+      <div class="ai-card" onclick="generateGig('stripe')">
+        <div class="ai-card-icon">💳</div>
+        <div class="ai-card-title">Integracion Stripe + Pagos</div>
+        <div class="ai-card-desc">Genera titulo, descripcion, precios y FAQ para un gig de pagos.</div>
+        <button class="ai-card-btn">✨ Generar Contenido</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="terminal animate-in delay-4">
+    <div class="terminal-header">
+      <div class="terminal-dot red"></div>
+      <div class="terminal-dot yellow"></div>
+      <div class="terminal-dot green"></div>
+      <div class="terminal-title">neural-core — bash — 80x24</div>
+    </div>
+    <div class="terminal-body" id="terminal">
+      <div class="terminal-line"><span class="terminal-time">[11:13:45]</span> <span class="terminal-info">SUNSET MOON Neural Core v2.0.1 iniciado</span></div>
+      <div class="terminal-line"><span class="terminal-time">[11:13:46]</span> <span class="terminal-success">✓ 12 modulos de bots cargados correctamente</span></div>
+      <div class="terminal-line"><span class="terminal-time">[11:13:47]</span> <span class="terminal-info">✓ Conexion Stripe API establecida</span></div>
+      <div class="terminal-line"><span class="terminal-time">[11:13:48]</span> <span class="terminal-info">✓ Conexion OpenAI API establecida</span></div>
+      <div class="terminal-line"><span class="terminal-time">[11:13:49]</span> <span class="terminal-success">✓ 6 negocios activos en modo autonomo</span></div>
+      <div class="terminal-line"><span class="terminal-time">[11:13:50]</span> <span class="terminal-warn">⚠ Fiverr API no disponible para crear gigs automaticamente</span></div>
+      <div class="terminal-line"><span class="terminal-time">[11:13:51]</span> <span class="terminal-info">→ Modo hibrido activado: IA genera contenido, tu publicas en 2 min</span></div>
+      <div class="terminal-line"><span class="terminal-time">[11:13:52]</span> <span class="terminal-success">✓ Sistema listo para generar ingresos</span></div>
+      <div class="terminal-line"><span class="terminal-time">[11:13:53]</span> <span class="terminal-info">→ Usa el Generador IA arriba para crear tu primer gig</span></div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-title"><span class="icon">🌐</span> Plataformas de Ingresos</div>
+    <div class="section-count">6 Activas</div>
+  </div>
+  <div class="platforms-grid">
+    <div class="platform-card animate-in">
+      <div class="platform-header">
+        <div class="platform-top">
+          <div class="platform-icon-bg">🟢</div>
+          <div class="platform-status">● Activo</div>
+        </div>
+        <div class="platform-name">Fiverr</div>
+        <div class="platform-desc">Mercado global de servicios digitales. Ideal para empezar con precios bajos y escalar con reviews.</div>
+      </div>
+      <div class="platform-body">
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🤖 Configurare un chatbot IA para tu web</div>
+            <div class="gig-price">€49</div>
+          </div>
+          <div class="gig-desc">Instalo Tidio/Chatra con IA de OpenAI. Tu web vende 24/7 automaticamente. Incluye setup completo.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('fiverr-chatbot')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.fiverr.com','_blank')">🌐 Ir a Fiverr</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">✍️ Creare 30 posts para redes con IA</div>
+            <div class="gig-price">€29</div>
+          </div>
+          <div class="gig-desc">Uso ChatGPT para generar contenido viral. Entrega en 24h. Optimizado para Instagram, TikTok, LinkedIn.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('fiverr-content')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.fiverr.com','_blank')">🌐 Ir a Fiverr</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">⚙️ Automatizare tu atencion al cliente</div>
+            <div class="gig-price">€79</div>
+          </div>
+          <div class="gig-desc">Chatbot multicanal: web, WhatsApp, email. Respuestas automaticas + escalado inteligente a humanos.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('fiverr-auto')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.fiverr.com','_blank')">🌐 Ir a Fiverr</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="platform-card animate-in">
+      <div class="platform-header blue">
+        <div class="platform-top">
+          <div class="platform-icon-bg blue">🔵</div>
+          <div class="platform-status">● Activo</div>
+        </div>
+        <div class="platform-name">Upwork</div>
+        <div class="platform-desc">Clientes B2B con presupuestos altos. Proyectos a largo plazo y contratos recurrentes.</div>
+      </div>
+      <div class="platform-body">
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🤖 Desarrollador de automatizacion con IA</div>
+            <div class="gig-price">€25/h</div>
+          </div>
+          <div class="gig-desc">Creo sistemas de bots 24/7 para empresas. Integracion Stripe + OpenAI + dashboards.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('upwork-dev')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.upwork.com','_blank')">🌐 Ir a Upwork</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">📊 Consultor de chatbots y automatizacion</div>
+            <div class="gig-price">€199</div>
+          </div>
+          <div class="gig-desc">Auditoria de procesos + implementacion de soluciones IA. Informe completo + roadmap.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('upwork-consult')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.upwork.com','_blank')">🌐 Ir a Upwork</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">💳 Integracion de pagos Stripe para negocios</div>
+            <div class="gig-price">€149</div>
+          </div>
+          <div class="gig-desc">Configuro productos, suscripciones, webhooks y links de pago en Stripe. Listo en 48h.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('upwork-stripe')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.upwork.com','_blank')">🌐 Ir a Upwork</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="platform-card animate-in">
+      <div class="platform-header violet">
+        <div class="platform-top">
+          <div class="platform-icon-bg violet">🟣</div>
+          <div class="platform-status">● Activo</div>
+        </div>
+        <div class="platform-name">PeoplePerHour</div>
+        <div class="platform-desc">Mercado europeo. Menos competencia que Fiverr. Ideal para precios en euros.</div>
+      </div>
+      <div class="platform-body">
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🤖 Creare un bot de ventas para tu empresa</div>
+            <div class="gig-price">€99</div>
+          </div>
+          <div class="gig-desc">Bot con IA que vende tus productos automaticamente por chat. Setup completo incluido.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('pph-bot')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.peopleperhour.com','_blank')">🌐 Ir a PPH</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🚀 Setup completo de automatizacion 24/7</div>
+            <div class="gig-price">€249</div>
+          </div>
+          <div class="gig-desc">Configuro todo: bots, pagos, email, contenido. Sistema listo en 48h. Soporte 30 dias.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('pph-setup')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.peopleperhour.com','_blank')">🌐 Ir a PPH</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🎯 Generare leads B2B automaticamente</div>
+            <div class="gig-price">€79/mes</div>
+          </div>
+          <div class="gig-desc">Sistema de captacion de leads con IA. 50 leads cualificados/mes. Reporte semanal.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('pph-leads')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.peopleperhour.com','_blank')">🌐 Ir a PPH</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="platform-card animate-in">
+      <div class="platform-header emerald">
+        <div class="platform-top">
+          <div class="platform-icon-bg emerald">🔴</div>
+          <div class="platform-status">● Activo</div>
+        </div>
+        <div class="platform-name">Freelancer.com</div>
+        <div class="platform-desc">Competitivo pero con muchos proyectos. Bueno para empezar y ganar experiencia.</div>
+      </div>
+      <div class="platform-body">
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🤖 Creare un sistema de bots 24/7</div>
+            <div class="gig-price">€199</div>
+          </div>
+          <div class="gig-desc">Automatizacion completa: ventas, soporte, contenido. Dashboard incluido. Entrega en 72h.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('freelancer-bots')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.freelancer.com','_blank')">🌐 Ir a Freelancer</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">💳 Configurare Stripe para tu negocio</div>
+            <div class="gig-price">€69</div>
+          </div>
+          <div class="gig-desc">Productos, suscripciones, webhooks. Todo funcionando. Guia de uso incluida.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('freelancer-stripe')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.freelancer.com','_blank')">🌐 Ir a Freelancer</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">✍️ Redactare 10 articulos SEO con IA</div>
+            <div class="gig-price">€39</div>
+          </div>
+          <div class="gig-desc">Contenido optimizado para Google. Keywords research incluido. Entrega en 24h.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('freelancer-seo')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.freelancer.com','_blank')">🌐 Ir a Freelancer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="platform-card animate-in">
+      <div class="platform-header amber">
+        <div class="platform-top">
+          <div class="platform-icon-bg amber">🟡</div>
+          <div class="platform-status">● Activo</div>
+        </div>
+        <div class="platform-name">Guru</div>
+        <div class="platform-desc">Menos conocida pero comisiones bajas. Buena para nichos tecnicos.</div>
+      </div>
+      <div class="platform-body">
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🤖 Desarrollador de chatbots IA</div>
+            <div class="gig-price">€149</div>
+          </div>
+          <div class="gig-desc">Bots inteligentes para ventas, soporte y lead generation. WhatsApp, web, Instagram.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('guru-chatbot')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.guru.com','_blank')">🌐 Ir a Guru</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">📈 Automatizacion de marketing digital</div>
+            <div class="gig-price">€89/mes</div>
+          </div>
+          <div class="gig-desc">Email marketing, posts sociales, analiticas. Todo automatico. Reporte mensual.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('guru-marketing')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.guru.com','_blank')">🌐 Ir a Guru</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🌐 Landing page con chatbot integrado</div>
+            <div class="gig-price">€129</div>
+          </div>
+          <div class="gig-desc">Web profesional + bot vendedor 24/7. Lista en 24h. Hosting incluido 1 mes.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('guru-landing')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.guru.com','_blank')">🌐 Ir a Guru</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="platform-card animate-in">
+      <div class="platform-header cyan">
+        <div class="platform-top">
+          <div class="platform-icon-bg cyan">🟠</div>
+          <div class="platform-status">● Activo</div>
+        </div>
+        <div class="platform-name">Workana</div>
+        <div class="platform-desc">Mercado latinoamericano. Espanol nativo = ventaja competitiva.</div>
+      </div>
+      <div class="platform-body">
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">📱 Creare un bot de WhatsApp para tu negocio</div>
+            <div class="gig-price">€79</div>
+          </div>
+          <div class="gig-desc">Respuestas automaticas, catalogo de productos, pedidos. Soporte 30 dias incluido.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('workana-whatsapp')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.workana.com','_blank')">🌐 Ir a Workana</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🤖 Automatizare tu atencion al cliente</div>
+            <div class="gig-price">€99</div>
+          </div>
+          <div class="gig-desc">Chatbot multicanal: web, WhatsApp, Instagram, Facebook. IA incluida.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('workana-support')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.workana.com','_blank')">🌐 Ir a Workana</button>
+          </div>
+        </div>
+        <div class="gig-item">
+          <div class="gig-top">
+            <div class="gig-title">🛒 Configurare tu tienda online automatica</div>
+            <div class="gig-price">€199</div>
+          </div>
+          <div class="gig-desc">Shopify/WooCommerce + dropshipping + bots de venta. Lista para vender en 48h.</div>
+          <div class="gig-actions">
+            <button class="gig-btn gig-btn-primary" onclick="generateGigContent('workana-shop')">✨ Generar</button>
+            <button class="gig-btn gig-btn-secondary" onclick="window.open('https://www.workana.com','_blank')">🌐 Ir a Workana</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="revenue-section animate-in">
+    <div class="revenue-header">
+      <div class="revenue-title">📊 Tracker de Ingresos Reales</div>
+      <div class="revenue-total" id="revenueTotal">€0.00</div>
+    </div>
+    <div class="revenue-grid">
+      <div class="revenue-item">
+        <div class="revenue-platform">🟢 Fiverr</div>
+        <div class="revenue-amount" id="revFiverr">€0</div>
+      </div>
+      <div class="revenue-item">
+        <div class="revenue-platform">🔵 Upwork</div>
+        <div class="revenue-amount" id="revUpwork">€0</div>
+      </div>
+      <div class="revenue-item">
+        <div class="revenue-platform">🟣 PeoplePerHour</div>
+        <div class="revenue-amount" id="revPPH">€0</div>
+      </div>
+      <div class="revenue-item">
+        <div class="revenue-platform">🔴 Freelancer</div>
+        <div class="revenue-amount" id="revFreelancer">€0</div>
+      </div>
+      <div class="revenue-item">
+        <div class="revenue-platform">🟡 Guru</div>
+        <div class="revenue-amount" id="revGuru">€0</div>
+      </div>
+      <div class="revenue-item">
+        <div class="revenue-platform">🟠 Workana</div>
+        <div class="revenue-amount" id="revWorkana">€0</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-logo">🌙</div>
+  <div class="footer-text">SUNSET MOON — Command Center</div>
+  <div class="footer-text" style="color:var(--text-muted);font-size:13px">12 Bots · 6 Plataformas · 18 Gigs · Ingresos 24/7</div>
+  <div class="footer-links">
+    <a href="https://EltitoMC98.github.io/Sunset-moon/" class="footer-link" target="_blank">Landing Page</a>
+    <a href="https://dashboard.stripe.com" class="footer-link" target="_blank">Stripe Dashboard</a>
+    <a href="https://platform.openai.com" class="footer-link" target="_blank">OpenAI API</a>
+    <a href="https://github.com/EltitoMC98/Sunset-moon" class="footer-link" target="_blank">GitHub Repo</a>
+  </div>
+</footer>
+
+<script>
+function updateClock(){
+  document.getElementById('clock').textContent=new Date().toLocaleTimeString('es-ES',{hour12:false});
+}
+updateClock();
+setInterval(updateClock,1000);
+
+function addTerminalLine(text,type='info'){
+  const t=document.getElementById('terminal');
+  const time=new Date().toLocaleTimeString('es-ES',{hour12:false});
+  const typeClass=type==='success'?'terminal-success':type==='warn'?'terminal-warn':type==='error'?'terminal-error':'terminal-info';
+  t.innerHTML+=`<div class="terminal-line"><span class="terminal-time">[${time}]</span> <span class="${typeClass}">${text}</span></div>`;
+  t.scrollTop=t.scrollHeight;
+}
+
+function generateGig(type){
+  addTerminalLine(`🧠 Generando contenido para gig: ${type}...`,'info');
+  setTimeout(()=>{
+    addTerminalLine(`✓ Titulo generado por IA`,'success');
+    addTerminalLine(`✓ Descripcion generada (500 palabras)`,'success');
+    addTerminalLine(`✓ 3 paquetes de precios generados`,'success');
+    addTerminalLine(`✓ FAQ generada (5 preguntas)`,'success');
+    addTerminalLine(`✓ Tags SEO generados`,'success');
+    addTerminalLine(`→ Copia el contenido y pegalo en la plataforma`,'warn');
+
+    const content=`
+═══════════════════════════════════════
+CONTENIDO GENERADO POR IA
+═══════════════════════════════════════
+
+TITULO:
+"Configurare un chatbot IA que venda por ti 24/7"
+
+DESCRIPCION:
+¿Tienes una web pero pierdes clientes porque no respondes rapido?
+
+Configuro un chatbot inteligente con IA (OpenAI) que:
+✓ Responde consultas automaticamente 24/7
+✓ Cualifica leads y los envia a tu email
+✓ Cierra ventas con links de pago
+✓ Escalada a humano solo cuando es necesario
+
+INCLUYE:
+• Instalacion en tu web (WordPress, Shopify, HTML)
+• Configuracion con tu base de conocimiento
+• 3 flujos de conversacion personalizados
+• Dashboard de metricas
+• Video tutorial de uso
+
+ENTREGA: 24-48 horas
+
+PAQUETES:
+Basico (€49): Chatbot basico + 1 flujo
+Estandar (€79): Chatbot IA + 3 flujos + dashboard
+Premium (€149): Todo + WhatsApp + Instagram + soporte 30 dias
+
+FAQ:
+Q: ¿Necesito saber programar?
+A: No, yo lo configuro todo.
+
+Q: ¿Funciona con mi web?
+A: Si, funciona con cualquier web.
+
+Q: ¿Puedo modificar las respuestas?
+A: Si, te enseno como hacerlo.
+
+TAGS: chatbot, ia, openai, automatizacion, ventas, bot, whatsapp
+
+═══════════════════════════════════════
+COPIA ESTO Y PEGALO EN FIVERR/UPWORK
+═══════════════════════════════════════
+    `;
+    alert(content);
+  },1500);
+}
+
+function generateGigContent(gigId){
+  generateGig(gigId);
+}
+
+function updateRevenue(platform,amount){
+  const map={'fiverr':'revFiverr','upwork':'revUpwork','pph':'revPPH','freelancer':'revFreelancer','guru':'revGuru','workana':'revWorkana'};
+  const el=document.getElementById(map[platform]||'revFiverr');
+  if(el)el.textContent='€'+parseFloat(amount).toFixed(0);
+
+  let total=0;
+  ['revFiverr','revUpwork','revPPH','revFreelancer','revGuru','revWorkana'].forEach(id=>{
+    const v=document.getElementById(id).textContent.replace('€','');
+    total+=parseFloat(v)||0;
+  });
+  document.getElementById('revenueTotal').textContent='€'+total.toFixed(2);
+  document.getElementById('revTotal').textContent='€'+total.toFixed(2);
+}
+
+setTimeout(()=>addTerminalLine('🧠 Generador IA listo. Haz clic en cualquier boton "Generar" para crear contenido.','info'),3000);
+setTimeout(()=>addTerminalLine('💡 Consejo: Empieza con Fiverr (mas facil) y luego escala a Upwork.','warn'),5000);
+</script>
+</body>
+</html>
